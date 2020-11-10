@@ -12,10 +12,10 @@ AbstractState StateFinder::getState() {
 	return this->state;
 }
 
-StateStatus StateFinder::findState(AbstractState& state, Rule rule) {
+StateStatus StateFinder::findState(AbstractState& state, Rule& rule) {
 	this->state = state;
-	auto stateId = state.getId();
-	if (stateId == rule.getÑonsequence().get()->getId()) {
+	auto stateId = this->state.getId();
+	if (stateId == rule.getConsequence().get()->getId()) {
 		this->status = StateStatus::DIVERGENCE;
 		return this->status;
 	}

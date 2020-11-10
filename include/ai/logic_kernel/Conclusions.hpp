@@ -1,29 +1,29 @@
 #ifndef CONCLUSION
 #define CONCLUSION
 
-#include <boost/ptr_container/ptr_list.hpp>
+#include <list>
 #include "../states/AbstractState.hpp"
 
 class Conclusions {
 private:
-	std::shared_ptr<boost::ptr_list<AbstractState>> known;
-	std::shared_ptr<boost::ptr_list<AbstractState>> unknown;
-	std::shared_ptr<boost::ptr_list<AbstractState>> fresh;
+	std::shared_ptr<std::list<AbstractState>> known;
+	std::shared_ptr<std::list<AbstractState>> unknown;
+	std::shared_ptr<std::list<AbstractState>> fresh;
 public:
 	Conclusions();
-	Conclusions(std::shared_ptr<boost::ptr_list<AbstractState>> unknown);
+	Conclusions(std::shared_ptr<std::list<AbstractState>> unknown);
 	~Conclusions();
-	void addUserInput(AbstractState* state);
-	std::shared_ptr<boost::ptr_list<AbstractState>> getKnown();
-	bool addUnknownState(AbstractState* state);
-	std::shared_ptr<boost::ptr_list<AbstractState>> getUnknown();
-	void addFreshState(AbstractState* state);
-	std::shared_ptr<boost::ptr_list<AbstractState>> getFresh();
+	void addUserInput(const AbstractState& state);
+	std::shared_ptr<std::list<AbstractState>> getKnown();
+	bool addUnknownState(const AbstractState& state);
+	std::shared_ptr<std::list<AbstractState>> getUnknown();
+	void addFreshState(const AbstractState& state);
+	std::shared_ptr<std::list<AbstractState>> getFresh();
 	void updateKnownStates();
 	bool hasUnknownState();
 private:
-	bool isAlreadyStored(AbstractState* state);
-	void removeFromUnknownStates(AbstractState* state);
+	bool isAlreadyStored(const AbstractState& state);
+	void removeFromUnknownStates(const AbstractState& state);
 };
 
 #endif //!CONCLUSION

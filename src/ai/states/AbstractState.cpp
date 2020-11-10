@@ -35,8 +35,8 @@ void AbstractState::setValue(int value) {
 	this->initialized = true;
 }
 
-bool AbstractState::compare(AbstractState* value) {
-	return (*this) == *value;
+bool AbstractState::compare(const AbstractState& value) {
+	return (*this) == value;
 }
 
 bool AbstractState::isInitialized() {

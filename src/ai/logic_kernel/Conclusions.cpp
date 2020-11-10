@@ -1,15 +1,15 @@
 #include "../../../include/ai/logic_kernel/Conclusions.hpp"
 
 Conclusions::Conclusions() {
-	this->known = std::make_shared<boost::ptr_list<AbstractState>>();
-	this->unknown = std::make_shared<boost::ptr_list<AbstractState>>();
-	this->fresh = std::make_shared<boost::ptr_list<AbstractState>>();
+	this->known = std::make_shared<std::list<AbstractState>>();
+	this->unknown = std::make_shared<std::list<AbstractState>>();
+	this->fresh = std::make_shared<std::list<AbstractState>>();
 }
 
-Conclusions::Conclusions(std::shared_ptr<boost::ptr_list<AbstractState>> unknown) {
-	this->known = std::make_shared<boost::ptr_list<AbstractState>>();
+Conclusions::Conclusions(std::shared_ptr<std::list<AbstractState>> unknown) {
+	this->known = std::make_shared<std::list<AbstractState>>();
 	this->unknown = unknown;
-	this->fresh = std::make_shared<boost::ptr_list<AbstractState>>();
+	this->fresh = std::make_shared<std::list<AbstractState>>();
 }
 
 Conclusions::~Conclusions() {
@@ -18,17 +18,17 @@ Conclusions::~Conclusions() {
 	this->fresh.reset();
 }
 
-void Conclusions::addUserInput(AbstractState* state) {
+void Conclusions::addUserInput(const AbstractState& state) {
 	this->removeFromUnknownStates(state);
 	this->known.get()->push_back(state);
 }
 
-std::shared_ptr<boost::ptr_list<AbstractState>> Conclusions::getKnown() {
+std::shared_ptr<std::list<AbstractState>> Conclusions::getKnown() {
 	return this->known;
 }
 
 
-bool Conclusions::addUnknownState(AbstractState* state) {
+bool Conclusions::addUnknownState(const AbstractState& state) {
 	if (this->isAlreadyStored(state)) {
 		return false;
 	}
@@ -36,22 +36,23 @@ bool Conclusions::addUnknownState(AbstractState* state) {
 	return true;
 }
 
-std::shared_ptr<boost::ptr_list<AbstractState>> Conclusions::getUnknown() {
+std::shared_ptr<std::list<AbstractState>> Conclusions::getUnknown() {
 	return this->unknown;
 }
 
-void Conclusions::addFreshState(AbstractState* state) {
+void Conclusions::addFreshState(const AbstractState& state) {
 	this->removeFromUnknownStates(state);
 	this->fresh.get()->push_back(state);
 }
 
-std::shared_ptr<boost::ptr_list<AbstractState>> Conclusions::getFresh() {
+std::shared_ptr<std::list<AbstractState>> Conclusions::getFresh() {
 	return this->fresh;
 }
 
 void Conclusions::updateKnownStates() {
 	while (!this->fresh.get()->empty()) {
-		this->known.get()->push_back(this->fresh.get()->pop_front().get());
+		this->known.get()->push_back(this->fresh.get()->front());
+		this->fresh.get()->pop_front();
 	}
 }
 
@@ -59,23 +60,23 @@ bool Conclusions::hasUnknownState() {
 	return !this->unknown.get()->empty();
 }
 
-bool Conclusions::isAlreadyStored(AbstractState* state) {
+bool Conclusions::isAlreadyStored(const AbstractState& state) {
 	auto itState = std::find(this->known.get()->begin(),
-		                                this->known.get()->end(), *state);
+		                                this->known.get()->end(), state);
 	if (itState == this->known.get()->end()) {
 		return true;
 	}
 	itState = std::find(this->fresh.get()->begin(),
-		                                this->fresh.get()->end(), *state);
+		                                this->fresh.get()->end(), state);
 	if (itState == this->fresh.get()->end()) {
 		return true;
 	}
 	return false;
 }
 
-void Conclusions::removeFromUnknownStates(AbstractState* state) {
+void Conclusions::removeFromUnknownStates(const AbstractState& state) {
 	auto itState = std::find(this->unknown.get()->begin(), 
-		                                this->unknown.get()->end(), *state);
+		                                this->unknown.get()->end(), state);
 	std::cout << *(this->unknown.get()->begin()) << std::endl;
 	for (auto it = this->unknown.get()->begin(); it != this->unknown.get()->end(); ++it) {
 		std::cout << *it << std::endl;

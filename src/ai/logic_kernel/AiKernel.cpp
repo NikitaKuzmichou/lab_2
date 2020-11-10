@@ -44,17 +44,18 @@ void AiKernel::setConclusions(std::shared_ptr<Conclusions>) {
 bool AiKernel::startService() {
 	int iterationNumber = 1;
 	auto messanger = this->factoriesFactory.get()->
-		          getInteractorFactoryInstance()->getMessageInteractor().get();
+		                            getInteractorFactoryInstance()->
+		                                        getMessageInteractor().get();
 	while (this->conclusions.get()->hasUnknownState() 
 		   && this->knowledgeBase.get()->hasNotExcludedRules()) {
 		bool ruleNotExcluded = false;
 		messanger->printIterationNumber(iterationNumber);
 		messanger->printInfo(this->conclusions);
-		for (auto itRule = this->knowledgeBase.get()->getRules().begin();
-			 itRule != this->knowledgeBase.get()->getRules().end();
+		for (auto itRule = this->knowledgeBase.get()->getRules()->begin();
+			 itRule != this->knowledgeBase.get()->getRules()->end();
 			 ++itRule) {
-			bool excludeRule = this->kernelService.get()
-				                     ->updateConclusionsByRule(this->conclusions, *itRule);
+			bool excludeRule = this->kernelService.get()->
+				                 updateConclusionsByRule(this->conclusions, *itRule);
 			if (excludeRule) {
 				this->getKnowledgeBase().excludeRule(*itRule);
 				ruleNotExcluded = false;

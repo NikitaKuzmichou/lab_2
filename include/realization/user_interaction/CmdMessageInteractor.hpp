@@ -5,7 +5,7 @@
 
 class CmdMessageInteractor : public AbstractMessageInteractor {
 private:
-	void printStates(boost::ptr_list<AbstractState>* states);
+	void printStates(std::list<AbstractState> &states);
 public:
 	CmdMessageInteractor(std::shared_ptr<AbstractMessageStorage> msgStorage);
 	virtual void printInfo(std::shared_ptr<Conclusions> conclusions) override;

@@ -1,15 +1,15 @@
 #include "../../../include/realization/knowledge_base/ConclusionsFiller.hpp"
 
 std::shared_ptr<Conclusions> ConclusionsFiller::getFilledConclusions() {
-	auto unknowConclusions = std::make_shared<boost::ptr_list<AbstractState>>();
-	unknowConclusions.get()->push_back(std::make_shared<AbstractState>(1).get());
-	unknowConclusions.get()->push_back(std::make_shared<AbstractState>(2).get());
-	unknowConclusions.get()->push_back(std::make_shared<AbstractState>(3).get());
-	unknowConclusions.get()->push_back(std::make_shared<AbstractState>(4).get());
-	unknowConclusions.get()->push_back(std::make_shared<AbstractState>(5).get());
-	unknowConclusions.get()->push_back(std::make_shared<AbstractState>(6).get());
-	unknowConclusions.get()->push_back(std::make_shared<AbstractState>(7).get());
-	unknowConclusions.get()->push_back(std::make_shared<AbstractState>(8).get());
-	unknowConclusions.get()->push_back(std::make_shared<AbstractState>(9).get());
+	auto unknowConclusions = std::make_shared<std::list<AbstractState>>();
+	unknowConclusions->push_back(AbstractState(1));
+	unknowConclusions->push_back(AbstractState(2));
+	unknowConclusions->push_back(AbstractState(3));
+	unknowConclusions->push_back(AbstractState(4));
+	unknowConclusions->push_back(AbstractState(5));
+	unknowConclusions->push_back(AbstractState(6));
+	unknowConclusions->push_back(AbstractState(7));
+	unknowConclusions->push_back(AbstractState(8));
+	unknowConclusions->push_back(AbstractState(9));
 	return std::make_shared<Conclusions>(unknowConclusions);
 }

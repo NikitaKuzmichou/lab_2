@@ -2,18 +2,18 @@
 
 CmdMessageInteractor::CmdMessageInteractor(
                             std::shared_ptr<AbstractMessageStorage> msgStorage)
-                                      : AbstractMessageInteractor(msgStorage) {
+                                        : AbstractMessageInteractor(msgStorage) {
 }
 
 void CmdMessageInteractor::printInfo(std::shared_ptr<Conclusions> conclusions) {
     std::cout << this->messagesStorage.get()->getKnownStatesMsg() << std::endl;
-    this->printStates(conclusions.get()->getKnown().get());
+    this->printStates(*(conclusions.get()->getKnown()));
     std::cout << this->messagesStorage.get()->getUnknownStatesMsg() << std::endl;
-    this->printStates(conclusions.get()->getUnknown().get());
+    this->printStates(*(conclusions.get()->getUnknown()));
 }
 
-void CmdMessageInteractor::printStates(boost::ptr_list<AbstractState>* states) {
-    for (auto itState = states->begin(); itState != states->end(); ++itState) {
+void CmdMessageInteractor::printStates(std::list<AbstractState> &states) {
+    for (auto itState = states.begin(); itState != states.end(); ++itState) {
         std::cout << this->messagesStorage.get()->getStateMsg(*itState) << std::endl;
     }
     std::cout << std::endl;

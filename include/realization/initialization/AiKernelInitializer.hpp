@@ -19,7 +19,7 @@ public:
     AiKernel getInitializedAiKernel();
 private:
     void getInitialUserInput(std::shared_ptr<Conclusions> conclusions, 
-                             CmdUserInitialData initializer);
+                             CmdUserInitialData &initializer);
 };
 
 #endif // !AI_KERNEL_INITIALIZER

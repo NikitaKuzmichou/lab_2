@@ -4,7 +4,6 @@
 #include "StateStatus.hpp"
 #include "../../knowledge_base/Rule.hpp"
 #include "../../states/AbstractState.hpp"
-#include <memory>
 
 class StateFinder {
 private:
@@ -14,7 +13,7 @@ public:
 	StateFinder();
 	StateStatus getStatus();
 	AbstractState getState();
-	StateStatus findState(AbstractState& state, Rule rule);
+	StateStatus findState(AbstractState& state, Rule& rule);
 };
 
 #endif // !STATE_FINDER

@@ -31,12 +31,12 @@ AiKernel AiKernelInitializer::getInitializedAiKernel() {
 
 void AiKernelInitializer::getInitialUserInput(
 	                           std::shared_ptr<Conclusions> conclusions,
-	                                       CmdUserInitialData initializer) {
+	                                       CmdUserInitialData &initializer) {
 	while (!initializer.inputIsOver()) {
 		initializer.printMainMessageMenu();
 		auto usrInput = initializer.readUserInput();
 		if (usrInput != nullptr) {
-			conclusions.get()->addUserInput(usrInput.get());
+			conclusions.get()->addUserInput(*usrInput);
 		}
 	}
 }

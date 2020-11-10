@@ -5,11 +5,11 @@
 
 class KnowledgeBaseFiller {
 private:
-	std::shared_ptr<boost::ptr_list<Rule>> getCharacterTypeRules();
-	std::shared_ptr<boost::ptr_list<Rule>> getCharacterNatureRules();
-	std::shared_ptr<boost::ptr_list<Rule>> getOtherRules();
-	std::shared_ptr<boost::ptr_list<Rule>> getCharacterClassRules();
-	void appendRules(std::shared_ptr<boost::ptr_list<Rule>>, std::shared_ptr<boost::ptr_list<Rule>>);
+	std::shared_ptr<std::list<Rule>> getCharacterTypeRules();
+	std::shared_ptr<std::list<Rule>> getCharacterNatureRules();
+	std::shared_ptr<std::list<Rule>> getOtherRules();
+	std::shared_ptr<std::list<Rule>> getCharacterClassRules();
+	void appendRules(std::shared_ptr<std::list<Rule>>, std::shared_ptr<std::list<Rule>>);
 public:
 	std::shared_ptr<KnowledgeBase> getFilledKnowledgeBase();
 };

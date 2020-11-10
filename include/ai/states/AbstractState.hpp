@@ -16,7 +16,7 @@ public:
 	virtual int getValue();
 	virtual void setId(unsigned int id);
 	virtual void setValue(int value);
-	virtual bool compare(AbstractState* value);
+	virtual bool compare(const AbstractState& value);
 	bool isInitialized();
 	friend bool operator== (const AbstractState& val1, const AbstractState& val2);
 	friend std::ostream& operator<< (std::ostream& os, const AbstractState& val);

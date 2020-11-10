@@ -4,7 +4,7 @@
 
 KernelService::KernelService() {
 	this->stateFinder = std::make_shared<StateFinder>();
-	this->confirmed = boost::container::list<AbstractState>();
+	this->confirmed = std::list<AbstractState>();
 	this->maxUnknownStates = 1;
 }
 
@@ -19,7 +19,7 @@ KernelService::~KernelService() {
 	delete this->interactionFactory;
 }
 
-void KernelService::setInteractionFactory(AbstractInteractorFactory* interactionFactory) {
+void KernelService::setInteractionFactory(AbstractInteractorFactory *interactionFactory) {
 	this->interactionFactory = interactionFactory;
 }
 
@@ -27,15 +27,15 @@ void KernelService::setMaxUnknownStates(int maxUnknownStates) {
 	this->maxUnknownStates = maxUnknownStates;
 }
 
-bool KernelService::updateConclusionsByRule(std::shared_ptr<Conclusions> conclusions, Rule rule) {
+bool KernelService::updateConclusionsByRule(std::shared_ptr<Conclusions> conclusions, Rule &rule) {
 	this->refresh();
 	bool excludeRule = false;
-	if (!this->confirmStates(conclusions.get()->getKnown().get(), rule)) {
+	if (!this->confirmStates(*(conclusions.get()->getKnown()), rule)) {
 		excludeRule = true;
 	} else if (rule.getStates().get()->size() - this->confirmed.size() > this->maxUnknownStates) {
 		excludeRule = false;
 	} else if (this->confirmUserInputStates(conclusions, rule)) {
-		conclusions.get()->addFreshState(rule.getÑonsequence().get());
+		conclusions.get()->addFreshState(*(rule.getConsequence()));
 		excludeRule = true;
 	} else {
 		excludeRule = true;
@@ -43,10 +43,10 @@ bool KernelService::updateConclusionsByRule(std::shared_ptr<Conclusions> conclus
 	return excludeRule;
 }
 
-bool KernelService::confirmStates(boost::ptr_list<AbstractState>* knownStates, Rule rule) {
+bool KernelService::confirmStates(std::list<AbstractState> &knownStates, Rule &rule) {
 	bool noDivergence = true;
-	for (auto itKnownState = knownStates->begin();
-		 itKnownState != knownStates->end(); ++itKnownState) {
+	for (auto itKnownState = knownStates.begin();
+		 itKnownState != knownStates.end(); ++itKnownState) {
 		this->stateFinder.get()->findState(*itKnownState, rule);
 		StateStatus status = this->stateFinder.get()->getStatus();
 		if (status == StateStatus::CONFIRMED) {
@@ -62,18 +62,14 @@ bool KernelService::confirmStates(boost::ptr_list<AbstractState>* knownStates, R
 }
 
 bool KernelService::confirmUserInputStates(
-	                                  std::shared_ptr<Conclusions> conclusions, Rule rule) {
-	std::shared_ptr<AbstractRequestInteractor> reqInteractor;
-	std::shared_ptr<AbstractResponseInteractor> respInteractor;
+	                                  std::shared_ptr<Conclusions> conclusions, Rule &rule) {
+	auto reqInteractor = this->interactionFactory->getRequestInteractor();;
+	auto respInteractor = this->interactionFactory->getResponseInteractor();;
 	bool allInputsConfirmed = true;
 	for (auto itUnk = this->notFound.begin(); itUnk != this->notFound.end(); ++itUnk) {
-		reqInteractor =
-			this->interactionFactory->getRequestInteractor();
-		respInteractor =
-			this->interactionFactory->getResponseInteractor();
 		reqInteractor.get()->printRequest((*itUnk).getId());
 		auto usrInput = respInteractor.get()->readState((*itUnk).getId());
-		conclusions.get()->addUserInput(usrInput.get());
+		conclusions.get()->addUserInput(*usrInput);
 		this->stateFinder.get()->findState(*usrInput, rule);
 		if (this->stateFinder.get()->getStatus() == StateStatus::DIVERGENCE) {
 			allInputsConfirmed = false;
