@@ -77,9 +77,5 @@ bool Conclusions::isAlreadyStored(const AbstractState& state) {
 void Conclusions::removeFromUnknownStates(const AbstractState& state) {
 	auto itState = std::find(this->unknown.get()->begin(), 
 		                                this->unknown.get()->end(), state);
-	std::cout << *(this->unknown.get()->begin()) << std::endl;
-	for (auto it = this->unknown.get()->begin(); it != this->unknown.get()->end(); ++it) {
-		std::cout << *it << std::endl;
-	}
 	this->unknown.get()->erase(itState);
 }
