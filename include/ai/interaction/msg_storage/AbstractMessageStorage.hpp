@@ -11,6 +11,7 @@ public:
 	virtual std::string getRuleNotExcluded() = 0;
 	virtual std::string getKnownStatesMsg() = 0;
 	virtual std::string getUnknownStatesMsg() = 0;
+	virtual std::string getSomeStatesNotDefined() = 0;
 };
 
 #endif // !ABSTRACT_MESSAGE_STORAGE

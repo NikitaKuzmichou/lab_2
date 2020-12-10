@@ -6,23 +6,27 @@ CmdMessageInteractor::CmdMessageInteractor(
 }
 
 void CmdMessageInteractor::printInfo(std::shared_ptr<Conclusions> conclusions) {
-    std::cout << this->messagesStorage.get()->getKnownStatesMsg() << std::endl;
-    this->printStates(*(conclusions.get()->getKnown()));
-    std::cout << this->messagesStorage.get()->getUnknownStatesMsg() << std::endl;
-    this->printStates(*(conclusions.get()->getUnknown()));
+    std::cout << this->messagesStorage->getKnownStatesMsg() << std::endl;
+    this->printStates(*(conclusions->getKnown()));
+    std::cout << this->messagesStorage->getUnknownStatesMsg() << std::endl;
+    this->printStates(*(conclusions->getUnknown()));
 }
 
-void CmdMessageInteractor::printStates(std::list<AbstractState> &states) {
+void CmdMessageInteractor::printStates(std::vector<AbstractState> &states) {
     for (auto itState = states.begin(); itState != states.end(); ++itState) {
-        std::cout << this->messagesStorage.get()->getStateMsg(*itState) << std::endl;
+        std::cout << this->messagesStorage->getStateMsg(*itState) << std::endl;
     }
     std::cout << std::endl;
 }
 
 void CmdMessageInteractor::printIterationNumber(int iteration) {
-    std::cout << this->messagesStorage.get()->getIterNumMsg(iteration) << std::endl;
+    std::cout << this->messagesStorage->getIterNumMsg(iteration) << std::endl;
 }
 
 void CmdMessageInteractor::printRuleNotExcluded() {
-    std::cout << this->messagesStorage.get()->getRuleNotExcluded() << std::endl;
+    std::cout << this->messagesStorage->getRuleNotExcluded() << std::endl;
+}
+
+void CmdMessageInteractor::printSomeStatesNotDefined() {
+    std::cout << this->messagesStorage->getSomeStatesNotDefined() << std::endl;
 }

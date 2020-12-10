@@ -29,4 +29,3 @@ std::shared_ptr<AbstractMessageInteractor> CmdInteractorFactory::getMessageInter
 	auto msgStorage = std::make_shared<CmdMessageStorage>();
 	return std::make_shared<CmdMessageInteractor>(msgStorage);
 }
-

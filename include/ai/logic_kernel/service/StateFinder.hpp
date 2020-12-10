@@ -13,7 +13,7 @@ public:
 	StateFinder();
 	StateStatus getStatus();
 	AbstractState getState();
-	StateStatus findState(AbstractState& state, Rule& rule);
+	StateStatus findState(std::vector<AbstractState>& knownStates, AbstractState& state);
 };
 
 #endif // !STATE_FINDER

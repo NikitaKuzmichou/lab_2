@@ -1,15 +1,16 @@
 #ifndef CMD_USER_INITIAL_DATA
 #define CMD_USER_INITIAL_DATA
 
-#include <boost/ptr_container/ptr_list.hpp>
 #include "../../ai/states/AbstractState.hpp"
 #include "CmdResponseInteractor.hpp"
 #include "CmdRequestInteractor.hpp"
+#include <vector>
 
 class CmdUserInitialData {
 private:
 	std::shared_ptr<AbstractResponseInteractor> responseInteractor;
 	std::shared_ptr<AbstractRequestInteractor> requestInteractor;
+	std::shared_ptr<std::vector<int>> selectedInputs;
 	bool inputOver = false;
 public:
 	CmdUserInitialData(std::shared_ptr<AbstractResponseInteractor> respInter,

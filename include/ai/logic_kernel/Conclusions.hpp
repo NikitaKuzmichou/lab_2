@@ -1,25 +1,21 @@
 #ifndef CONCLUSION
 #define CONCLUSION
 
-#include <list>
+#include <vector>
 #include "../states/AbstractState.hpp"
 
 class Conclusions {
 private:
-	std::shared_ptr<std::list<AbstractState>> known;
-	std::shared_ptr<std::list<AbstractState>> unknown;
-	std::shared_ptr<std::list<AbstractState>> fresh;
+	std::shared_ptr<std::vector<AbstractState>> known;
+	std::shared_ptr<std::vector<AbstractState>> unknown;
 public:
 	Conclusions();
-	Conclusions(std::shared_ptr<std::list<AbstractState>> unknown);
+	Conclusions(std::shared_ptr<std::vector<AbstractState>> unknown);
 	~Conclusions();
-	void addUserInput(const AbstractState& state);
-	std::shared_ptr<std::list<AbstractState>> getKnown();
+	void addKnownState(const AbstractState& state);
+	std::shared_ptr<std::vector<AbstractState>> getKnown();
 	bool addUnknownState(const AbstractState& state);
-	std::shared_ptr<std::list<AbstractState>> getUnknown();
-	void addFreshState(const AbstractState& state);
-	std::shared_ptr<std::list<AbstractState>> getFresh();
-	void updateKnownStates();
+	std::shared_ptr<std::vector<AbstractState>> getUnknown();
 	bool hasUnknownState();
 private:
 	bool isAlreadyStored(const AbstractState& state);

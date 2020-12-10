@@ -4,18 +4,22 @@
 
 KernelService::KernelService() {
 	this->stateFinder = std::make_shared<StateFinder>();
-	this->confirmed = std::list<AbstractState>();
+	this->confirmed = std::make_shared<std::vector<AbstractState>>();
+	this->notFound = std::make_shared<std::vector<AbstractState>>();
 	this->maxUnknownStates = 1;
 }
 
 KernelService::KernelService(int maxUnknownStates) {
 	this->maxUnknownStates = maxUnknownStates;
+	this->stateFinder = std::make_shared<StateFinder>();
+	this->notFound = std::make_shared<std::vector<AbstractState>>();
+	this->confirmed = std::make_shared<std::vector<AbstractState>>();
 }
 
 KernelService::~KernelService() {
 	this->stateFinder.reset();
-	this->confirmed.clear();
-	this->notFound.clear();
+	this->confirmed.reset();
+	this->notFound.reset();
 	delete this->interactionFactory;
 }
 
@@ -30,12 +34,12 @@ void KernelService::setMaxUnknownStates(int maxUnknownStates) {
 bool KernelService::updateConclusionsByRule(std::shared_ptr<Conclusions> conclusions, Rule &rule) {
 	this->refresh();
 	bool excludeRule = false;
-	if (!this->confirmStates(*(conclusions.get()->getKnown()), rule)) {
+	if (this->confirmStates(*(conclusions->getKnown()), rule)) {
 		excludeRule = true;
-	} else if (rule.getStates().get()->size() - this->confirmed.size() > this->maxUnknownStates) {
+	} else if (this->notFound->size() > this->maxUnknownStates) {
 		excludeRule = false;
 	} else if (this->confirmUserInputStates(conclusions, rule)) {
-		conclusions.get()->addFreshState(*(rule.getConsequence()));
+		conclusions->addKnownState(*(rule.getConsequence()));
 		excludeRule = true;
 	} else {
 		excludeRule = true;
@@ -43,35 +47,38 @@ bool KernelService::updateConclusionsByRule(std::shared_ptr<Conclusions> conclus
 	return excludeRule;
 }
 
-bool KernelService::confirmStates(std::list<AbstractState> &knownStates, Rule &rule) {
-	bool noDivergence = true;
-	for (auto itKnownState = knownStates.begin();
-		 itKnownState != knownStates.end(); ++itKnownState) {
-		this->stateFinder.get()->findState(*itKnownState, rule);
-		StateStatus status = this->stateFinder.get()->getStatus();
+bool KernelService::confirmStates(std::vector<AbstractState>& knownStates,
+	                              Rule& rule) {
+	bool hasDivergence = false;
+	for (int i = 0; i < rule.getStates()->size(); ++i) {
+		this->stateFinder->findState(knownStates, rule.getStates()->at(i));
+		StateStatus status = this->stateFinder->getStatus();
 		if (status == StateStatus::CONFIRMED) {
-			this->confirmed.push_back(this->stateFinder.get()->getState());
-		} else if (status == StateStatus::NOT_FOUND) {
-			this->notFound.push_back(this->stateFinder.get()->getState());
-		} else if (status == StateStatus::DIVERGENCE) {
-			noDivergence = false;
+			this->confirmed->push_back(rule.getStates()->at(i));
+		}
+		else if (status == StateStatus::NOT_FOUND) {
+			this->notFound->push_back(rule.getStates()->at(i));
+		}
+		else if (status == StateStatus::DIVERGENCE) {
+			hasDivergence = true;
 			break;
 		}
 	}
-	return noDivergence;
+	return hasDivergence;
 }
 
 bool KernelService::confirmUserInputStates(
-	                                  std::shared_ptr<Conclusions> conclusions, Rule &rule) {
-	auto reqInteractor = this->interactionFactory->getRequestInteractor();;
-	auto respInteractor = this->interactionFactory->getResponseInteractor();;
+	                                    std::shared_ptr<Conclusions> conclusions,
+	                                                                 Rule &rule) {
+	auto reqInteractor = this->interactionFactory->getRequestInteractor();
+	auto respInteractor = this->interactionFactory->getResponseInteractor();
 	bool allInputsConfirmed = true;
-	for (auto itUnk = this->notFound.begin(); itUnk != this->notFound.end(); ++itUnk) {
-		reqInteractor.get()->printRequest((*itUnk).getId());
-		auto usrInput = respInteractor.get()->readState((*itUnk).getId());
-		conclusions.get()->addUserInput(*usrInput);
-		this->stateFinder.get()->findState(*usrInput, rule);
-		if (this->stateFinder.get()->getStatus() == StateStatus::DIVERGENCE) {
+	for (int i = 0; i < notFound->size(); ++i) {
+		reqInteractor->printRequest(notFound->at(i).getId());
+		auto usrInput = respInteractor->readState(notFound->at(i).getId());
+		conclusions->addKnownState(*usrInput);
+		if (this->stateFinder->findState(*(rule.getStates()), *usrInput) !=
+			StateStatus::CONFIRMED) {
 			allInputsConfirmed = false;
 			break;
 		}
@@ -80,6 +87,6 @@ bool KernelService::confirmUserInputStates(
 }
 
 void KernelService::refresh() {
-	this->confirmed.clear();
-	this->notFound.clear();
+	this->confirmed->clear();
+	this->notFound->clear();
 }

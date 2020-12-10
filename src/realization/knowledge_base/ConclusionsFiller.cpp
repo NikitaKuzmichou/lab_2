@@ -1,7 +1,7 @@
 #include "../../../include/realization/knowledge_base/ConclusionsFiller.hpp"
 
 std::shared_ptr<Conclusions> ConclusionsFiller::getFilledConclusions() {
-	auto unknowConclusions = std::make_shared<std::list<AbstractState>>();
+	auto unknowConclusions = std::make_shared<std::vector<AbstractState>>();
 	unknowConclusions->push_back(AbstractState(1));
 	unknowConclusions->push_back(AbstractState(2));
 	unknowConclusions->push_back(AbstractState(3));

@@ -22,7 +22,7 @@ int AiKernel::getMaxUnknownStates() {
 
 void AiKernel::setFactoriesFactory(std::shared_ptr<FactoriesFactory> ff) {
 	this->factoriesFactory = ff;
-	this->kernelService.get()->setInteractionFactory(ff.get()->getInteractorFactoryInstance());
+	this->kernelService->setInteractionFactory(ff->getInteractorFactoryInstance());
 }
 
 KnowledgeBase AiKernel::getKnowledgeBase() {
@@ -37,36 +37,41 @@ std::shared_ptr<Conclusions> AiKernel::getConclusions() {
 	return this->conclusions;
 }
 
-void AiKernel::setConclusions(std::shared_ptr<Conclusions>) {
-	this->conclusions = this->conclusions;
+void AiKernel::setConclusions(std::shared_ptr<Conclusions> conclusions) {
+	this->conclusions = conclusions;
 }
 
 bool AiKernel::startService() {
 	int iterationNumber = 1;
-	auto messanger = this->factoriesFactory.get()->
+	auto messanger = this->factoriesFactory->
 		                            getInteractorFactoryInstance()->
-		                                        getMessageInteractor().get();
-	while (this->conclusions.get()->hasUnknownState() 
-		   && this->knowledgeBase.get()->hasNotExcludedRules()) {
+		                                        getMessageInteractor();
+	while (this->conclusions->hasUnknownState() &&
+		   this->knowledgeBase->hasNotExcludedRules()) {
 		bool ruleNotExcluded = false;
 		messanger->printIterationNumber(iterationNumber);
 		messanger->printInfo(this->conclusions);
-		for (auto itRule = this->knowledgeBase.get()->getRules()->begin();
-			 itRule != this->knowledgeBase.get()->getRules()->end();
-			 ++itRule) {
-			bool excludeRule = this->kernelService.get()->
-				                 updateConclusionsByRule(this->conclusions, *itRule);
+		for (int i = 0; i < this->knowledgeBase->getRules()->size(); ++i) {
+			bool excludeRule = this->kernelService->
+				                             updateConclusionsByRule(this->conclusions,
+					                                  this->knowledgeBase->getRules()->at(i));
 			if (excludeRule) {
-				this->getKnowledgeBase().excludeRule(*itRule);
+				this->getKnowledgeBase().excludeRule(
+					                     this->knowledgeBase->getRules()->at(i));
 				ruleNotExcluded = false;
-			}
-			this->getConclusions().get()->updateKnownStates();
-			if (ruleNotExcluded) {
-				messanger->printRuleNotExcluded();
-				return false;
+			} else {
+				++i;
 			}
 		}
+		if (ruleNotExcluded) {
+			messanger->printRuleNotExcluded();
+			return false;
+		}
+		++iterationNumber;
 	}
-	messanger->printInfo(this->conclusions);
+	if (this->conclusions->hasUnknownState()) {
+		messanger->printSomeStatesNotDefined();
+		return false;
+	}
 	return true;
 }

@@ -18,11 +18,11 @@ AbstractState::AbstractState(unsigned int id, int value) {
 	this->initialized = true;
 }
 
-unsigned int AbstractState::getId() {
+unsigned int AbstractState::getId() const {
 	return this->id;
 }
 
-int AbstractState::getValue() {
+int AbstractState::getValue() const {
 	return this->value;
 }
 
@@ -41,6 +41,10 @@ bool AbstractState::compare(const AbstractState& value) {
 
 bool AbstractState::isInitialized() {
 	return this->initialized;
+}
+
+bool operator!= (const AbstractState& val1, const AbstractState& val2) {
+	return !(val1 == val2);
 }
 
 bool operator== (const AbstractState& val1, const AbstractState& val2) {

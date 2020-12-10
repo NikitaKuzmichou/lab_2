@@ -7,5 +7,5 @@ CmdRequestInteractor::CmdRequestInteractor(
 }
 
 void CmdRequestInteractor::printRequest(unsigned int id) {
-	std::cout << this->reqStorage.get()->getRequest(id) << std::endl;
+	std::cout << this->reqStorage->getRequest(id) << std::endl;
 }

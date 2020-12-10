@@ -6,23 +6,23 @@ AiKernelInitializer::AiKernelInitializer() {
 
 void AiKernelInitializer::initializeKnowledgeBase() {
 	KnowledgeBaseFiller kbFiller;
-	this->aiKernel.get()->setKnowledgeBase(kbFiller.getFilledKnowledgeBase());
+	this->aiKernel->setKnowledgeBase(kbFiller.getFilledKnowledgeBase());
 }
 
 void AiKernelInitializer::initializeFactoriesFactory() {
 	FactoriesFactory::getInstance()->
 		setInteractorFactoryInstance(CmdInteractorFactory::getInstance());
-	this->aiKernel.get()->setFactoriesFactory(FactoriesFactory::getInstance());
+	this->aiKernel->setFactoriesFactory(FactoriesFactory::getInstance());
 }
 
 void AiKernelInitializer::initializeConclusions() {
 	ConclusionsFiller conclFiller;
 	CmdUserInitialData initializer(
-		FactoriesFactory::getInstance().get()->getInteractorFactoryInstance()->getResponseInteractor(),
-		FactoriesFactory::getInstance().get()->getInteractorFactoryInstance()->getRequestInteractor());
+		FactoriesFactory::getInstance()->getInteractorFactoryInstance()->getResponseInteractor(),
+		FactoriesFactory::getInstance()->getInteractorFactoryInstance()->getRequestInteractor());
 	auto conclusions = conclFiller.getFilledConclusions();
 	this->getInitialUserInput(conclusions, initializer);
-	this->aiKernel.get()->setConclusions(conclusions);
+	this->aiKernel->setConclusions(conclusions);
 }
 
 AiKernel AiKernelInitializer::getInitializedAiKernel() {
@@ -36,7 +36,7 @@ void AiKernelInitializer::getInitialUserInput(
 		initializer.printMainMessageMenu();
 		auto usrInput = initializer.readUserInput();
 		if (usrInput != nullptr) {
-			conclusions.get()->addUserInput(*usrInput);
+			conclusions->addKnownState(*usrInput);
 		}
 	}
 }

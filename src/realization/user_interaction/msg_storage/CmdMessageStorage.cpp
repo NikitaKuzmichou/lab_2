@@ -79,8 +79,18 @@ std::string CmdMessageStorage::getKnownStatesMsg() {
 
 std::string CmdMessageStorage::getUnknownStatesMsg() {
 	std::ostringstream oss;
-	oss << "====================================\n"
+	oss << "========================================\n"
 		<< "=== Информация о неопределённых параметрах "
+		<< "===\n"
+		<< "========================================";
+	return oss.str();
+}
+
+std::string CmdMessageStorage::getSomeStatesNotDefined() {
+	std::ostringstream oss;
+	oss << "====================================\n"
+		<< "=== Все правила были исключены, "
+		<< "но некоторые значения остались не определены "
 		<< "===\n"
 		<< "====================================";
 	return oss.str();

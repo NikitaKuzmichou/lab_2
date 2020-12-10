@@ -13,7 +13,7 @@ Rule::Rule(int id) {
 }
 
 
-Rule::Rule(int id, const std::shared_ptr<std::list<AbstractState>> states,
+Rule::Rule(int id, const std::shared_ptr<std::vector<AbstractState>> states,
 	               const std::shared_ptr<AbstractState> conclusion) {
 	this->id = id;
 	this->states = states;
@@ -42,15 +42,15 @@ std::shared_ptr<AbstractState> Rule::getConsequence() {
 }
 
 void Rule::addState(AbstractState &state) {
-	this->states.get()->push_back(state);
+	this->states->push_back(state);
 }
 
-void Rule::setStates(std::shared_ptr<std::list<AbstractState>> states) {
+void Rule::setStates(std::shared_ptr<std::vector<AbstractState>> states) {
 	this->states.reset();
 	this->states = states;
 }
 
-std::shared_ptr<std::list<AbstractState>> Rule::getStates() {
+std::shared_ptr<std::vector<AbstractState>> Rule::getStates() {
 	return this->states;
 }
 
@@ -60,4 +60,16 @@ bool operator== (const Rule& rule1, const Rule& rule2) {
 
 bool operator!= (const Rule& rule1, const Rule& rule2) {
 	return !(rule1.id == rule2.id);
+}
+
+std::ostream& operator<< (std::ostream& os, const Rule& rule) {
+	os << "{ \n id:" << rule.id << "\n states: {" << std::endl;
+	for (int i = 0; i < rule.states->size(); ++i) {
+		os << "   " << rule.states->at(i) << "   " << std::endl;
+	}
+	os << "  }" << std::endl;
+	os << "consequence: { " << std::endl;
+	os << "   [\n" << *(rule.consequence) << "   ]" << std::endl;
+	os << "  }" << std::endl;
+	return os;
 }

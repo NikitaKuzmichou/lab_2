@@ -12,20 +12,14 @@ AbstractState StateFinder::getState() {
 	return this->state;
 }
 
-StateStatus StateFinder::findState(AbstractState& state, Rule& rule) {
+StateStatus StateFinder::findState(std::vector<AbstractState>& knownStates, AbstractState& state) {
 	this->state = state;
-	auto stateId = this->state.getId();
-	if (stateId == rule.getConsequence().get()->getId()) {
-		this->status = StateStatus::DIVERGENCE;
-		return this->status;
-	}
-	for (auto itRuleState = rule.getStates().get()->begin();
-		itRuleState != rule.getStates().get()->end(); ++itRuleState) {
-		auto ruleStateId = (*itRuleState).getId();
-		if (stateId == ruleStateId) {
-			if (state.getValue() == (*itRuleState).getValue()) {
+	for (auto& knownState : knownStates) {
+		if (knownState.getId() == state.getId()) {
+			if (knownState == state) {
 				this->status = StateStatus::CONFIRMED;
-			} else {
+			}
+			else {
 				this->status = StateStatus::DIVERGENCE;
 			}
 			return this->status;

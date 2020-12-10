@@ -2,19 +2,19 @@
 #define KNOWLEDGE_BASE
 
 #include "Rule.hpp"
-#include <list>
+#include <vector>
 
 class KnowledgeBase {
 private:
-	std::shared_ptr<std::list<Rule>> rules;
-	std::shared_ptr<std::list<Rule>> excludedRules;
+	std::shared_ptr<std::vector<Rule>> rules;
+	std::shared_ptr<std::vector<Rule>> excludedRules;
 public:
 	KnowledgeBase();
-	KnowledgeBase(const std::shared_ptr<std::list<Rule>> &rules);
+	KnowledgeBase(const std::shared_ptr<std::vector<Rule>> &rules);
 	~KnowledgeBase();
 	void addRule(Rule &rule);
-	std::shared_ptr<std::list<Rule>> getRules();
-	std::shared_ptr<std::list<Rule>> getExcludedRules();
+	std::shared_ptr<std::vector<Rule>> getRules();
+	std::shared_ptr<std::vector<Rule>> getExcludedRules();
 	bool excludeRule(const Rule &rule);
 	bool hasNotExcludedRules();
 	bool hasExcludedRules();

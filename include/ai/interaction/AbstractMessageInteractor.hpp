@@ -13,6 +13,7 @@ public:
 	virtual void printInfo(std::shared_ptr<Conclusions> conclusions) = 0;
 	virtual void printIterationNumber(int i = 0) = 0;
 	virtual void printRuleNotExcluded() = 0;
+	virtual void printSomeStatesNotDefined() = 0;
 };
 
 #endif // !ABSTRACT_MESSAGE_INTERACTOR

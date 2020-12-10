@@ -7,19 +7,20 @@ class CmdMessageStorage : public AbstractMessageStorage {
 private:
 	std::string resolveFightingMethod(int value);
 	std::string resolvePreferredMagic(int value);
-	std::string resolveFightingReason(int valud);
-	std::string resolveAligment(int valud);
-	std::string resolveSocialization(int valud);
-	std::string resolveMagicOrWeapon(int valud);
-	std::string resolveCharacterType(int valud);
-	std::string resolveCharacterClass(int valud);
-	std::string resolveCharacterNature(int valud);
+	std::string resolveFightingReason(int value);
+	std::string resolveAligment(int value);
+	std::string resolveSocialization(int value);
+	std::string resolveMagicOrWeapon(int value);
+	std::string resolveCharacterType(int value);
+	std::string resolveCharacterClass(int value);
+	std::string resolveCharacterNature(int value);
 public:
 	virtual std::string getStateMsg(AbstractState state) override;
 	virtual std::string getIterNumMsg(int number) override;
 	virtual std::string getRuleNotExcluded() override;
 	virtual std::string getKnownStatesMsg() override;
 	virtual std::string getUnknownStatesMsg() override;
+	virtual std::string getSomeStatesNotDefined() override;
 };
 
 #endif // !CMD_MESSAGE_STORAGE
