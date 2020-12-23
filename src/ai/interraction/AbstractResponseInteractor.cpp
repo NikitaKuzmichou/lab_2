@@ -6,7 +6,9 @@ AbstractResponseInteractor::AbstractResponseInteractor() {
 }
 
 std::shared_ptr<AbstractState> AbstractResponseInteractor::getReadedState() {
-	return std::make_shared<AbstractState>(this->stateId, this->readedValue);
+	auto state = std::make_shared<AbstractState>(this->stateId, this->readedValue);
+	state->setInitType(InitType::FROM_USER);
+	return state;
 }
 
 std::istream& operator>> (std::istream& is, AbstractResponseInteractor* urr) {

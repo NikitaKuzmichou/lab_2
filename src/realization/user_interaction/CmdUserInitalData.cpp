@@ -34,6 +34,7 @@ std::shared_ptr<AbstractState> CmdUserInitialData::makeDecision(int input) {
 	if (input > 0 && input < 6) {
 		this->requestInteractor->printRequest(input);
 		auto readedState = this->responseInteractor->readState(input);
+		readedState->setInitType(InitType::FROM_START);
 		return readedState;
 	} else if (input == 6) {
 		this->inputOver = true;

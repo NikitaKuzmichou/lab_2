@@ -4,22 +4,33 @@ AbstractState::AbstractState() {
 	this->id = 0;
 	this->value = 0;
 	this->initialized = false;
+	this->initType = InitType::UNDEFINED;
 }
 
 AbstractState::AbstractState(unsigned int id) {
 	this->id = id;
 	this->value = 0;
 	this->initialized = false;
+	this->initType = InitType::UNDEFINED;
 }
 
 AbstractState::AbstractState(unsigned int id, int value) {
 	this->id = id;
 	this->value = value;
 	this->initialized = true;
+	this->initType = InitType::UNDEFINED;
 }
 
 unsigned int AbstractState::getId() const {
 	return this->id;
+}
+
+void AbstractState::setInitType(InitType initType) {
+	this->initType = initType;
+}
+
+InitType AbstractState::getInitType() const {
+	return this->initType;
 }
 
 int AbstractState::getValue() const {

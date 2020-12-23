@@ -2,16 +2,20 @@
 #define ABSTRACT_VALUE
 
 #include <iostream>
+#include "InitType.hpp"
 
 class AbstractState {
 private:
 	unsigned int id;
 	int value;
 	bool initialized;
+	InitType initType;
 public:
 	AbstractState();
 	AbstractState(unsigned int id);
 	AbstractState(unsigned int id, int currentValue);
+	virtual void setInitType(InitType initType);
+	virtual InitType getInitType() const;
 	virtual unsigned int getId() const;
 	virtual int getValue() const;
 	virtual void setId(unsigned int id);

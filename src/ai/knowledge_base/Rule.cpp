@@ -18,6 +18,7 @@ Rule::Rule(int id, const std::shared_ptr<std::vector<AbstractState>> states,
 	this->id = id;
 	this->states = states;
 	this->consequence = conclusion;
+	this->consequence->setInitType(InitType::FROM_CONCLUSIONS);
 }
 
 Rule::~Rule() {
@@ -35,6 +36,7 @@ unsigned int Rule::getId() {
 
 void Rule::set—onsequence(std::shared_ptr<AbstractState> conclusion) {
 	this->consequence = conclusion;
+	this->consequence->setInitType(InitType::FROM_CONCLUSIONS);
 }
 
 std::shared_ptr<AbstractState> Rule::getConsequence() {

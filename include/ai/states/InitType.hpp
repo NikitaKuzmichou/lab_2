@@ -1,0 +1,6 @@
+enum class InitType {
+	FROM_START,
+	FROM_USER,
+	FROM_CONCLUSIONS,
+	UNDEFINED
+};

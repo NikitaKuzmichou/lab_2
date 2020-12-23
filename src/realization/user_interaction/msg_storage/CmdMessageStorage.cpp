@@ -45,6 +45,9 @@ std::string CmdMessageStorage::getStateMsg(AbstractState state) {
 	default:
 		oss << "*произошла ошибка*";
 	}
+	oss << std::endl;
+	oss << "===>Информация получена ";
+	oss << this->resolveInitializingType(state.getInitType());
 	return oss.str();
 }
 
@@ -220,6 +223,19 @@ std::string CmdMessageStorage::resolveCharacterNature(int value) {
 		return "альтруистичный";
 	case 4:
 		return "хаотичный";
+	default:
+		return "*не определено*";
+	}
+}
+
+std::string CmdMessageStorage::resolveInitializingType(InitType initType) {
+	switch (initType) {
+	case InitType::FROM_START:
+		return "в момент начала выполнения";
+	case InitType::FROM_CONCLUSIONS:
+		return "на основании известных правил";
+	case InitType::FROM_USER:
+		return "на основании пользовательского ввода";
 	default:
 		return "*не определено*";
 	}

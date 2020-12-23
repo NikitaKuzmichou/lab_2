@@ -14,6 +14,7 @@ private:
 	std::string resolveCharacterType(int value);
 	std::string resolveCharacterClass(int value);
 	std::string resolveCharacterNature(int value);
+	std::string resolveInitializingType(InitType initType);
 public:
 	virtual std::string getStateMsg(AbstractState state) override;
 	virtual std::string getIterNumMsg(int number) override;
